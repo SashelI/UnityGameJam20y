@@ -15,15 +15,15 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 497
-    y: 496
+    x: 119
+    y: 483
     width: 190
     height: 135
   IsDragging: 1
   IsSelected: 0
   _sentence:
     CharacterName: "H4CKRO\xCF"
-    Text: '(The mask you''re wearing is an AR device : '
+    Text: '[The mask you''re wearing is an AR device : ]'
     CharacterSprite: {fileID: 21300000, guid: e7731f425e9ac604f9d1a6adbee3c770, type: 3}
   ParentNodes:
   - {fileID: -1958181254075692171}
@@ -47,15 +47,15 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 1097
-    y: 529
+    x: 737
+    y: 516
     width: 190
     height: 155
   IsDragging: 1
   IsSelected: 0
   _sentence:
     CharacterName: "H4CKRO\xCF"
-    Text: Use it to find out what happened here !
+    Text: '[Use it to find out what happened here !]'
     CharacterSprite: {fileID: 21300000, guid: 7a13fc3c0066d174c8a23b8cdb433eb5, type: 3}
   ParentNodes:
   - {fileID: 6010049819487083308}
@@ -79,12 +79,12 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 210
-    y: 490
+    x: -150
+    y: 477
     width: 190
-    height: 0
+    height: 135
   IsDragging: 1
-  IsSelected: 1
+  IsSelected: 0
   _sentence:
     CharacterName: "H4CKRO\xCF"
     Text: Alright. The mask is ready.
@@ -133,8 +133,8 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 793
-    y: 522
+    x: 433
+    y: 509
     width: 190
     height: 135
   IsDragging: 0

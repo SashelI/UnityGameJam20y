@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 #if UNITY_LOCALIZATION
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
@@ -44,7 +45,7 @@ namespace cherrydev
 
         private int _maxAmountOfAnswerButtons;
 
-        private bool _isDialogStarted;
+        public bool isDialogStarted { get; private set; }
         private bool _isCurrentSentenceSkipped;
         private bool _isCurrentSentenceTyping;
 
@@ -167,14 +168,7 @@ namespace cherrydev
             Action<DialogVariablesHandler> onVariablesHandlerInitialized = null, 
             Action<DialogVariablesHandler> onDialogFinished = null)
         {
-	        if (_isDialogStarted)
-	        {
-		        StartCoroutine(WaitBeforeDialog(dialogNodeGraph, onVariablesHandlerInitialized, onDialogFinished));
-		        return;
-	        }
-
-
-            _isDialogStarted = true;
+            isDialogStarted = true;
             _openingTimer = 0;
             _boundFunctionNames.Clear();
 
@@ -195,19 +189,6 @@ namespace cherrydev
             DefineFirstNode(dialogNodeGraph);
             CalculateMaxAmountOfAnswerButtons();
             HandleDialogGraphCurrentNode(_currentNode);
-        }
-
-        private IEnumerator WaitBeforeDialog(DialogNodeGraph dialogNodeGraph,
-	        Action<DialogVariablesHandler> onVariablesHandlerInitialized = null,
-	        Action<DialogVariablesHandler> onDialogFinished = null)
-        {
-	        while (_isDialogStarted)
-	        {
-		        yield return new WaitForSeconds(0.5f);
-	        }
-
-	        yield return new WaitForSecondsRealtime(1f);
-            StartDialog(dialogNodeGraph, onVariablesHandlerInitialized, onDialogFinished);
         }
 
         /// <summary>
@@ -565,7 +546,7 @@ namespace cherrydev
         /// </summary>
         private void EndDialog()
         {
-            _isDialogStarted = false;
+            isDialogStarted = false;
             _openingTimer = 0;
 
             _dialogFinished?.Invoke(_variablesHandler);
@@ -747,7 +728,7 @@ namespace cherrydev
         /// </summary>
         private void HandleSentenceSkipping()
         {
-            if (!_isDialogStarted || !_isCanSkippingText)
+            if (!isDialogStarted || !_isCanSkippingText)
                 return;
 
             _openingTimer += Time.deltaTime;

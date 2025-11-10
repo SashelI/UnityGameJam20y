@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using cherrydev;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +14,8 @@ namespace InvestigationSystem
         [SerializeField] private List<DialogEntry>  _stepsDialogGraphs = new();
 
         [Space]
-        [SerializeField] private GameObject _black = new();
-        [SerializeField] private DialogNodeGraph _intro = new();
+        [SerializeField] private GameObject _black;
+        [SerializeField] private DialogNodeGraph _intro;
 
         public static InvestigationDialogStarter Instance { get; private set; }
 
@@ -47,7 +49,12 @@ namespace InvestigationSystem
         {
             if(GetDialogueNode(step, time, out DialogNodeGraph dialogNodeGraph))
             {
-                _dialogBehaviour.StartDialog(dialogNodeGraph);
+	            if (_dialogBehaviour.isDialogStarted)
+	            {
+		            StartCoroutine(WaitBeforeDialog(dialogNodeGraph));
+		            return;
+	            }
+				_dialogBehaviour.StartDialog(dialogNodeGraph);
             }
             else
             {
@@ -59,6 +66,11 @@ namespace InvestigationSystem
         {
 	        if (GetDialogueNode(clue, out DialogNodeGraph dialogNodeGraph))
 	        {
+		        if (_dialogBehaviour.isDialogStarted)
+		        {
+			        StartCoroutine(WaitBeforeDialog(dialogNodeGraph));
+			        return;
+		        }
 		        _dialogBehaviour.StartDialog(dialogNodeGraph);
 	        }
 	        else
@@ -91,7 +103,20 @@ namespace InvestigationSystem
 	        return false;
         }
 
-        public void MakeSwitchAvailable()
+        private IEnumerator WaitBeforeDialog(DialogNodeGraph dialogNodeGraph)
+        {
+	        Debug.Log($"STARTING {dialogNodeGraph.name} WHILE{_dialogBehaviour.isDialogStarted}");
+	        while (_dialogBehaviour.isDialogStarted)
+	        {
+		        Debug.Log($"STARTING {dialogNodeGraph.name} WHILE{_dialogBehaviour.isDialogStarted}");
+		        yield return new WaitForSeconds(0.5f);
+	        }
+
+	        Debug.Log($"STARTING {dialogNodeGraph.name}");
+	        yield return new WaitForSecondsRealtime(1f);
+			_dialogBehaviour.StartDialog(dialogNodeGraph);
+        }
+public void MakeSwitchAvailable()
         {
 	        PastSwitchManager.Instance.CanSwitch = true;
             ShowSwitchTooltip();
