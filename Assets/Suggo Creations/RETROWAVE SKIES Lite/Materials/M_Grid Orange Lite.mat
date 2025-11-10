@@ -67,13 +67,13 @@ Material:
     - _GridRotation: 0
     - _Grid_Line_X_Width: 0.9
     - _Grid_Line_Y_Width: 0.9
-    - _Metallic: 0.85
+    - _Metallic: 1
     - _Parallax_Distance: -0.3
     - _Parallax_Offset: -0.3
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.74
+    - _Smoothness: 0
     - _SrcBlend: 1
     - _Surface: 0
     - _USETEXTUREBOOL: 1
@@ -82,7 +82,7 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _GridColor: {r: 2, g: 1.3641952, b: 0.5943396, a: 1}
+    - _GridColor: {r: 1.4610293, g: 0, b: 0.060885046, a: 1}
     - _GridSpeed: {r: 0, g: -0.1, b: 0, a: 0}
     - _GroundColor: {r: 0.16037738, g: 0.08143309, b: 0, a: 1}
     - _Parallax_Color: {r: 1.011765, g: 0, b: 1.011765, a: 1}

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 #if UNITY_LOCALIZATION
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
@@ -14,7 +15,7 @@ namespace cherrydev
     public class DialogBehaviour : MonoBehaviour
     {
         [SerializeField] private float _dialogCharDelay;
-        [SerializeField] private List<KeyCode> _nextSentenceKeyCodes;
+        [SerializeField] private InputActionReference nextSentenceInput;
         [SerializeField] private bool _isCanSkippingText = true;
 #if UNITY_LOCALIZATION
         [SerializeField] private bool _reloadTextOnLanguageChange = true;
@@ -156,12 +157,6 @@ namespace cherrydev
         public void SetCharDelay(float value) => _dialogCharDelay = value;
 
         /// <summary>
-        /// Setting nextSentenceKeyCodes
-        /// </summary>
-        /// <param name="keyCodes"></param>
-        public void SetNextSentenceKeyCodes(List<KeyCode> keyCodes) => _nextSentenceKeyCodes = keyCodes;
-
-        /// <summary>
         /// Start a dialog
         /// </summary>
         /// <param name="dialogNodeGraph"></param>
@@ -172,7 +167,15 @@ namespace cherrydev
             Action<DialogVariablesHandler> onVariablesHandlerInitialized = null, 
             Action<DialogVariablesHandler> onDialogFinished = null)
         {
+	        if (_isDialogStarted)
+	        {
+		        StartCoroutine(WaitBeforeDialog(dialogNodeGraph, onVariablesHandlerInitialized, onDialogFinished));
+		        return;
+	        }
+
+
             _isDialogStarted = true;
+            _openingTimer = 0;
             _boundFunctionNames.Clear();
 
             if (dialogNodeGraph.NodesList == null)
@@ -192,6 +195,19 @@ namespace cherrydev
             DefineFirstNode(dialogNodeGraph);
             CalculateMaxAmountOfAnswerButtons();
             HandleDialogGraphCurrentNode(_currentNode);
+        }
+
+        private IEnumerator WaitBeforeDialog(DialogNodeGraph dialogNodeGraph,
+	        Action<DialogVariablesHandler> onVariablesHandlerInitialized = null,
+	        Action<DialogVariablesHandler> onDialogFinished = null)
+        {
+	        while (_isDialogStarted)
+	        {
+		        yield return new WaitForSeconds(0.5f);
+	        }
+
+	        yield return new WaitForSecondsRealtime(1f);
+            StartDialog(dialogNodeGraph, onVariablesHandlerInitialized, onDialogFinished);
         }
 
         /// <summary>
@@ -550,6 +566,7 @@ namespace cherrydev
         private void EndDialog()
         {
             _isDialogStarted = false;
+            _openingTimer = 0;
 
             _dialogFinished?.Invoke(_variablesHandler);
             
@@ -733,9 +750,13 @@ namespace cherrydev
             if (!_isDialogStarted || !_isCanSkippingText)
                 return;
 
-            if (CheckNextSentenceKeyCodes() && !_isCurrentSentenceSkipped)
+            _openingTimer += Time.deltaTime;
+
+			if (_openingTimer >= 1 && CheckNextSentenceKeyCodes() && !_isCurrentSentenceSkipped)
                 _isCurrentSentenceSkipped = true;
         }
+
+        private double _openingTimer;
 
         /// <summary>
         /// Checking whether at least one key from the nextSentenceKeyCodes was pressed
@@ -743,13 +764,7 @@ namespace cherrydev
         /// <returns></returns>
         private bool CheckNextSentenceKeyCodes()
         {
-            for (int i = 0; i < _nextSentenceKeyCodes.Count; i++)
-            {
-                if (Input.GetKeyDown(_nextSentenceKeyCodes[i]))
-                    return true;
-            }
-
-            return false;
+	        return nextSentenceInput.action.WasReleasedThisFrame();
         }
     }
 }

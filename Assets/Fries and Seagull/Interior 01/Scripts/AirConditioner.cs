@@ -15,14 +15,14 @@ namespace Seagull.Interior_01 {
         [SerializeField] private ParticleSystem windParticleSystem;
         [SerializeField] private MeshRenderer lightBoxRenderer;
         
-        public void turnOn() {
+        public override void turnOn() {
             ParticleSystem.EmissionModule em = windParticleSystem.emission;
             em.rateOverTime = new ParticleSystem.MinMaxCurve(1.5f, 0.025f);
             lightBoxRenderer.material.color = new Color(96/255f, 109/255f, 1, 0);
             lightBoxRenderer.material.EnableKeyword("_EMISSION");
         }
 
-        public void turnOff() {
+        public override void turnOff() {
             ParticleSystem.EmissionModule em = windParticleSystem.emission;
             em.rateOverTime = new ParticleSystem.MinMaxCurve(0, 0);
             lightBoxRenderer.material.color = new Color(41/255f,41/255f,41/255f,1);

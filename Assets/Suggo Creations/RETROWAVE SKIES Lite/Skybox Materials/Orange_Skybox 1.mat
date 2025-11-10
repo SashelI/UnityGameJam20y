@@ -90,8 +90,8 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 0
     - _EnableFogOnTransparent: 1
     - _FogContrast: 30
-    - _FogHeight: 0.5
-    - _FogPower: 0
+    - _FogHeight: 1.3
+    - _FogPower: 2.34
     - _HorizonHeight: 1
     - _HorizonStrength: 1
     - _LinesMaskPower: 50
@@ -103,7 +103,7 @@ Material:
     - _QueueOffset: 0
     - _RenderQueueType: 1
     - _SrcBlend: 1
-    - _StarDensity: 10
+    - _StarDensity: 0
     - _StarSize: 185.4
     - _StencilRef: 0
     - _StencilRefDepth: 0

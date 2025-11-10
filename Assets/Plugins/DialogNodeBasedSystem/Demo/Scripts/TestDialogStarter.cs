@@ -1,5 +1,6 @@
 using UnityEngine;
 using cherrydev;
+using UnityEngine.Playables;
 
 namespace DialogNodeBasedSystem.Demo.Scripts
 {
@@ -7,13 +8,14 @@ namespace DialogNodeBasedSystem.Demo.Scripts
     {
         [SerializeField] private DialogBehaviour _dialogBehaviour;
         [SerializeField] private DialogNodeGraph _dialogGraph;
+        [SerializeField] private GameObject _black;
 
         private void Start()
         {
-            _dialogBehaviour.BindExternalFunction("Test", DebugExternal);
+            _dialogBehaviour.BindExternalFunction("EndIntro", DebugExternal);
             _dialogBehaviour.StartDialog(_dialogGraph);
         }
 
-        private void DebugExternal() => Debug.Log("External function works!");
+        private void DebugExternal() => _black.SetActive(false);
     }
 }
